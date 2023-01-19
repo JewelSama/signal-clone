@@ -1,20 +1,35 @@
 import { SafeAreaView, View, Text } from 'react-native'
-import React, {useLayoutEffect} from 'react'
+import React, {useEffect, useLayoutEffect, useState} from 'react'
 import { ScrollView } from 'react-native'
 import CustomListItem from '../components/CustomListItem'
 import { Avatar } from '@rneui/base'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 import { TouchableOpacity } from 'react-native'
 import { Image } from 'react-native'
 import {AntDesign, SimpleLineIcons} from "@expo/vector-icons"
+import { StyleSheet } from 'react-native'
 
 const HomeScreen = ({navigation}) => {
+    const [chats, setChats] = useState([])
 
     const signOut = () => {
         auth.signOut().then(() => {
             navigation.replace("Login")
         })
     }
+
+    useEffect(() => {
+        const unsubscribe = db.collection('chats').onSnapshot((snapshot) => 
+            setChats(
+                snapshot.docs.map(doc => ({
+                    id: snapshot.id,
+                    data: doc.data()
+                }))
+            )
+        )
+
+        return unsubscribe;
+    })
 
 
     useLayoutEffect(() => {
@@ -43,7 +58,7 @@ const HomeScreen = ({navigation}) => {
                     <AntDesign name="camerao" size={24} color="black" />
                 </TouchableOpacity>
 
-                <TouchableOpacity activeOpacity={0.5}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("AddChat")}>
                     <SimpleLineIcons name="pencil" size={24} color="black" />
                 </TouchableOpacity>
             </View>
@@ -51,10 +66,27 @@ const HomeScreen = ({navigation}) => {
         })
     })
     // console.log(auth?.currentUser?.photoURL)
+
+    const enterChat = (id, chatName) => {
+        navigation.navigate("Chat", {
+            id,
+            chatName
+        })
+    }
+
   return (
     <SafeAreaView>
-        <ScrollView>
-            <CustomListItem />
+        <ScrollView style={styles.container}>
+            {
+                chats.map(({id, data: {chatName}}) => (
+                    <CustomListItem 
+                        key={id} 
+                        id={id} 
+                        chatName={chatName}
+                        enterChat={enterChat}
+                    />
+                ))
+            }
 
         </ScrollView>
     </SafeAreaView>
@@ -62,3 +94,9 @@ const HomeScreen = ({navigation}) => {
 }
 
 export default HomeScreen
+
+const styles = StyleSheet.create({
+    container:{
+        height: "100%"
+    }
+})
