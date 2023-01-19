@@ -5,10 +5,9 @@ import { StatusBar } from 'expo-status-bar'
 import Logo from "../assets/icon.png"
 
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
 
 
     const signIn =() => {
@@ -34,7 +33,7 @@ const LoginScreen = () => {
              secureTextEntry type="password" />
         </View>
             <Button containerStyle={styles.button} onPress={signIn} title="Login" />
-            <Button containerStyle={styles.button} type="outline" title="Register" />
+            <Button containerStyle={styles.button} type="outline" title="Register" onPress={() => navigation.navigate("Register")} />
             <View style={{height: 40}}></View>
     </KeyboardAvoidingView>
   )
