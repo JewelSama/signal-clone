@@ -2,6 +2,7 @@ import { View,  KeyboardAvoidingView, StyleSheet } from 'react-native'
 import React, {useState, useLayoutEffect} from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Button, Input, Text } from '@rneui/base'
+import { auth } from '../firebase'
 
 const RegisterScreen = ({navigation}) => {
     const [name, setName] = useState("")
@@ -17,7 +18,15 @@ const RegisterScreen = ({navigation}) => {
 
 
     const register = () => {
-
+        auth
+            .createUserWithEmailAndPassword(email, password)
+            .then((authUser) => {
+                authUser.user.updateProfile({
+                    displayName: name,
+                    photoURL: imageUrl || "https://w7.pngwing.com/pngs/754/2/png-transparent-samsung-galaxy-a8-a8-user-login-telephone-avatar-pawn-blue-angle-sphere-thumbnail.png"
+                })
+            })
+            .catch((error) => alert(error.message))
     }
 
   return (
