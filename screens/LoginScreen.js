@@ -34,7 +34,7 @@ const LoginScreen = ({navigation}) => {
                 uri: "https://logos-download.com/wp-content/uploads/2020/06/Signal_Logo.png"
                 // uri: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3ASignal-Logo.svg&psig=AOvVaw19IXXIhmOWYldBtSwgpIjf&ust=1674168764506000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCMixmeaa0vwCFQAAAAAdAAAAABAE"
             }}
-            style={{width: 150, height: 150, borderRadius: 20}}
+            style={{width: 100, height: 100, borderRadius: 20}}
         />
         <View style={styles.inputContainer}>
             <Input placeholder="Email" 
